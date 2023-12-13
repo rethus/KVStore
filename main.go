@@ -7,6 +7,7 @@ import (
 	"sync"
 )
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>> Storer abstract
 type Storer[K comparable, V any] interface {
 	Put(K, V) error
 	Get(K) (V, error)
@@ -14,6 +15,7 @@ type Storer[K comparable, V any] interface {
 	Delete(K) (V, error)
 }
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>> KVStore implement
 type KVStore[K comparable, V any] struct {
 	mu   sync.RWMutex
 	data map[K]V
@@ -83,6 +85,8 @@ func (s *KVStore[K, V]) Delete(key K) (V, error) {
 	return value, nil
 }
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 type User struct {
 	ID        string
 	FirstName string
@@ -90,6 +94,7 @@ type User struct {
 	Gender    string
 }
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>> Server
 type Server struct {
 	//Storage    Storer[int, *User]
 	Storage    Storer[string, string]
@@ -135,6 +140,8 @@ func (s *Server) Start() {
 
 	e.Start(s.ListenAddr)
 }
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 func main() {
 	s := NewServer(":3000")
